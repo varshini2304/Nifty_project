@@ -40,9 +40,12 @@ const TradeDetailsModal = ({ open, onClose, stockCode, asOfDate }) => {
       title={`${stockCode} — Trade Details`}
       width="75vw"
       footer={
-        <Button onClick={() => exportToCsv(trades, `trade_details_${stockCode}_${asOfDate}.csv`)}>
-          Export CSV
-        </Button>
+        <div className="flex justify-between">
+          <Button onClick={() => exportToCsv(trades, `trade_details_${stockCode}_${asOfDate}.csv`)}>
+            Export CSV
+          </Button>
+          <Button onClick={onClose}>Close</Button>
+        </div>
       }
       destroyOnClose
       centered

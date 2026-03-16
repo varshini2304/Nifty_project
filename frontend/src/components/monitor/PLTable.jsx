@@ -1,7 +1,7 @@
 ﻿// frontend/src/components/monitor/PLTable.jsx
 import React from 'react';
 import { Table, Typography } from 'antd';
-import { getColorClass } from '../../utils/plColors';
+import { getArrow, getColorClass } from '../../utils/plColors';
 
 const { Link } = Typography;
 
@@ -36,7 +36,7 @@ const PLTable = ({ rows, onOpenDetails }) => {
       title: 'TradePrice',
       dataIndex: 'tradePrice',
       key: 'tradePrice',
-      render: (value) => <span className={getColorClass(value)}>{value}</span>,
+      render: (value) => <span>{value}</span>,
     },
     {
       title: 'Cashflow',
@@ -51,7 +51,7 @@ const PLTable = ({ rows, onOpenDetails }) => {
       dataIndex: 'pctChange',
       key: 'pctChange',
       render: (value) => {
-        const arrow = value > 0 ? '▲' : value < 0 ? '▼' : '';
+        const arrow = getArrow(value);
         return <span className={getColorClass(value)}>{arrow} {value}</span>;
       },
     },
@@ -92,12 +92,13 @@ const PLTable = ({ rows, onOpenDetails }) => {
       summary={() => {
         const totals = rows.reduce(
           (acc, row) => {
+            acc.pl += row.pl || 0;
             acc.pricePL += row.pricePL || 0;
             acc.tradePL += row.tradePL || 0;
             acc.totalPL += row.totalPL || 0;
             return acc;
           },
-          { pricePL: 0, tradePL: 0, totalPL: 0 }
+          { pl: 0, pricePL: 0, tradePL: 0, totalPL: 0 }
         );
         return (
           <Table.Summary fixed>
@@ -105,9 +106,18 @@ const PLTable = ({ rows, onOpenDetails }) => {
               <Table.Summary.Cell colSpan={9} align="right">
                 Totals
               </Table.Summary.Cell>
-              <Table.Summary.Cell>{totals.pricePL}</Table.Summary.Cell>
-              <Table.Summary.Cell>{totals.tradePL}</Table.Summary.Cell>
-              <Table.Summary.Cell>{totals.totalPL}</Table.Summary.Cell>
+              <Table.Summary.Cell>
+                <span className={getColorClass(totals.pl)}>{totals.pl}</span>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell>
+                <span className={getColorClass(totals.pricePL)}>{totals.pricePL}</span>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell>
+                <span className={getColorClass(totals.tradePL)}>{totals.tradePL}</span>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell>
+                <span className={getColorClass(totals.totalPL)}>{totals.totalPL}</span>
+              </Table.Summary.Cell>
             </Table.Summary.Row>
           </Table.Summary>
         );

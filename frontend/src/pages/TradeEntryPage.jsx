@@ -1,6 +1,6 @@
 ﻿// frontend/src/pages/TradeEntryPage.jsx
-import React, { useMemo, useRef, useState } from 'react';
-import { Button, Switch, Modal, notification, Dropdown } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Switch, Modal, notification } from 'antd';
 import Papa from 'papaparse';
 import dayjs from 'dayjs';
 import TradeTable from '../components/trade/TradeTable';
@@ -46,8 +46,16 @@ const TradeEntryPage = () => {
 
   const closeContextMenu = () => setContextMenu((prev) => ({ ...prev, open: false }));
 
+  useEffect(() => {
+    if (!contextMenu.open) return;
+    const close = () => closeContextMenu();
+    document.addEventListener('click', close);
+    return () => document.removeEventListener('click', close);
+  }, [contextMenu.open]);
+
   const addRowAt = (index, offset) => {
     const newRow = {
+      _key: `new-${Date.now()}-${Math.random()}`,
       tradeNo: null,
       code: '',
       name: '',
@@ -225,14 +233,23 @@ const TradeEntryPage = () => {
         showDeleted={showDeleted}
       />
 
-      <Dropdown
-        menu={{ items: menuItems }}
-        open={contextMenu.open}
-        onOpenChange={(open) => setContextMenu((prev) => ({ ...prev, open }))}
-        overlayStyle={{ position: 'fixed', left: contextMenu.x, top: contextMenu.y }}
-      >
-        <div className="fixed" style={{ left: contextMenu.x, top: contextMenu.y, width: 1, height: 1 }} />
-      </Dropdown>
+      {contextMenu.open ? (
+        <div
+          className="fixed z-50 bg-white border border-slate-200 shadow-lg rounded py-1 min-w-[160px]"
+          style={{ left: contextMenu.x, top: contextMenu.y }}
+          onMouseLeave={closeContextMenu}
+        >
+          {menuItems.map((item) => (
+            <div
+              key={item.key}
+              className="px-4 py-2 text-sm hover:bg-slate-50 cursor-pointer"
+              onClick={item.onClick}
+            >
+              {item.label}
+            </div>
+          ))}
+        </div>
+      ) : null}
 
       <input
         ref={fileInputRef}

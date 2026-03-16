@@ -91,7 +91,7 @@ const TradeTable = ({ rows, onRowUpdate, onRowContextMenu, showDeleted }) => {
     <Table
       dataSource={rows}
       columns={columns}
-      rowKey={(record, idx) => record.tradeNo || `new-${idx}`}
+      rowKey={(record) => record.tradeNo || record._key}
       pagination={false}
       onRow={(record) => ({
         onContextMenu: (event) => onRowContextMenu(event, record),

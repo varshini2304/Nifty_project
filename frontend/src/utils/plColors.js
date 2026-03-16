@@ -11,3 +11,9 @@ export const getColorClass = (value) => {
   if (color === 'red') return 'text-red-700';
   return 'text-gray-400';
 };
+
+export const getArrow = (value) => {
+  if (value > 0) return '▲';
+  if (value < 0) return '▼';
+  return '—';
+};
