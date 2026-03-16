@@ -57,3 +57,21 @@ Trades
 - `GET /api/v1/trades/by-stock/:code?asOfDate=YYYYMMDD`
 - `GET /api/v1/trades/export-csv`
 - `POST /api/v1/trades/import-csv`
+
+Stocks
+
+- `GET /api/v1/stocks`
+- `GET /api/v1/stocks/search?q=`
+- `GET /api/v1/stocks/:codeId`
+- `POST /api/v1/stocks`
+
+Prices
+
+- `GET /api/v1/prices?dt=`
+- `POST /api/v1/prices/batch-upsert`
+- `GET /api/v1/prices/latest?code=`
+- `GET /api/v1/prices/dates`
+
+Monitor
+
+- `GET /api/v1/monitor/pl?date=`

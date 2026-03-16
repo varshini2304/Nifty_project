@@ -203,10 +203,6 @@ router.post(
 
     const payload = Array.isArray(req.body) ? req.body : [req.body];
     const ops = payload.map((item) => {
-      if (!item.code_id || !item.market || !item.name) {
-        throw new Error('code_id, market, and name are required');
-      }
-
       const updateDoc = {
         code_id: String(item.code_id).trim(),
         market: String(item.market).trim(),
