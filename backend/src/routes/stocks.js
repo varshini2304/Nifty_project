@@ -132,26 +132,6 @@ router.get(
  *       404:
  *         description: Stock not found
  */
-router.get(
-  '/:codeId',
-  authMiddleware,
-  [param('codeId').trim().notEmpty().withMessage('codeId is required')],
-  asyncHandler(async (req, res) => {
-    const validationError = validateRequest(req, res);
-    if (validationError) {
-      return;
-    }
-
-    const codeId = String(req.params.codeId).trim();
-    const stock = await StocksList.findOne({ code_id: codeId }).lean();
-    if (!stock) {
-      return error(res, 'Stock not found', 404);
-    }
-
-    return success(res, stock, 'Stock fetched');
-  })
-);
-
 /**
  * @swagger
  * /api/v1/stocks/batch/codes:
@@ -171,6 +151,46 @@ router.get(
     const stocks = await StocksList.find({ market: 'NSE' }).select('code_id').lean();
     const codes = stocks.map((item) => item.code_id).filter(Boolean);
     return success(res, codes, 'Stock codes fetched');
+  })
+);
+
+/**
+ * @swagger
+ * /api/v1/stocks/{codeId}:
+ *   get:
+ *     summary: Get stock by code
+ *     tags: [Stocks]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: codeId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Stock fetched
+ *       404:
+ *         description: Stock not found
+ */
+router.get(
+  '/:codeId',
+  authMiddleware,
+  [param('codeId').trim().notEmpty().withMessage('codeId is required')],
+  asyncHandler(async (req, res) => {
+    const validationError = validateRequest(req, res);
+    if (validationError) {
+      return;
+    }
+
+    const codeId = String(req.params.codeId).trim();
+    const stock = await StocksList.findOne({ code_id: codeId }).lean();
+    if (!stock) {
+      return error(res, 'Stock not found', 404);
+    }
+
+    return success(res, stock, 'Stock fetched');
   })
 );
 
