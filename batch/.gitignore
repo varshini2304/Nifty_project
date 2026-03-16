@@ -1,0 +1,4 @@
+﻿# batch/.gitignore
+node_modules/
+logs/
+.env
