@@ -1,8 +1,10 @@
 ﻿// backend/src/utils/logger.js
+const fs = require('fs');
 const path = require('path');
 const winston = require('winston');
 
 const logDir = process.env.LOG_DIR || './logs';
+fs.mkdirSync(logDir, { recursive: true });
 
 const logger = winston.createLogger({
   level: 'info',

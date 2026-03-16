@@ -304,6 +304,7 @@ router.post(
 
 router.get(
   '/by-stock/:code',
+  // Keep /by-stock/:code and /export-csv ABOVE any /:tradeNo routes to avoid collisions.
   [
     param('code').trim().notEmpty().withMessage('code is required'),
     query('asOfDate').custom((value) => {
@@ -381,16 +382,13 @@ router.post(
 
     await new Promise((resolve, reject) => {
       const stream = Readable.from(req.file.buffer);
-      let headerChecked = false;
-
       stream
         .pipe(parse({ headers: true, ignoreEmpty: true, trim: true }))
         .on('headers', (headers) => {
-          headerChecked = true;
           const normalized = headers.map((h) => h.trim());
-          const matches = expectedHeaders.every((h, idx) => normalized[idx] === h);
-          if (!matches || normalized.length !== expectedHeaders.length) {
-            reject(new Error('CSV headers do not match expected format'));
+          const missing = expectedHeaders.filter((header) => !normalized.includes(header));
+          if (missing.length > 0) {
+            reject(new Error(`Missing CSV headers: ${missing.join(', ')}`));
           }
         })
         .on('error', (err) => reject(err))
@@ -398,9 +396,6 @@ router.post(
           rows.push(row);
         })
         .on('end', () => {
-          if (!headerChecked) {
-            reject(new Error('CSV headers missing'));
-          }
           resolve();
         });
     });

@@ -5,6 +5,8 @@ const { asyncHandler } = require('../utils/asyncHandler');
 const { success } = require('../utils/apiResponse');
 const authRoutes = require('./auth');
 const tradeRoutes = require('./trades');
+const stockRoutes = require('./stocks');
+const priceRoutes = require('./prices');
 
 const router = express.Router();
 
@@ -22,5 +24,7 @@ router.get(
 
 router.use('/auth', authRoutes);
 router.use('/trades', tradeRoutes);
+router.use('/stocks', stockRoutes);
+router.use('/prices', priceRoutes);
 
 module.exports = router;
