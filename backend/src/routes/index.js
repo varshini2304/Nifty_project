@@ -1,5 +1,4 @@
 ﻿// backend/src/routes/index.js
-// backend/src/routes/index.js
 const express = require('express');
 const mongoose = require('mongoose');
 const { asyncHandler } = require('../utils/asyncHandler');
