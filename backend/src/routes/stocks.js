@@ -154,6 +154,28 @@ router.get(
 
 /**
  * @swagger
+ * /api/v1/stocks/batch/codes:
+ *   get:
+ *     summary: Get stock codes (batch)
+ *     tags: [Stocks]
+ *     security:
+ *       - batchKey: []
+ *     responses:
+ *       200:
+ *         description: Stock codes fetched
+ */
+router.get(
+  '/batch/codes',
+  batchAuthMiddleware,
+  asyncHandler(async (req, res) => {
+    const stocks = await StocksList.find({ market: 'NSE' }).select('code_id').lean();
+    const codes = stocks.map((item) => item.code_id).filter(Boolean);
+    return success(res, codes, 'Stock codes fetched');
+  })
+);
+
+/**
+ * @swagger
  * /api/v1/stocks:
  *   post:
  *     summary: Upsert stocks (batch)

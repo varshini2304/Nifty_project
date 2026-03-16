@@ -55,10 +55,10 @@ const upsertPrices = async (pricesArray) => {
 
 const getActiveStockCodes = async () => {
   const response = await requestWithRetry(() =>
-    apiClient.get('/stocks', { params: { market: 'NSE' } })
+    apiClient.get('/stocks/batch/codes')
   );
-  const stocks = response.data?.data || [];
-  return stocks.map((item) => item.code_id).filter(Boolean);
+  const codes = response.data?.data || [];
+  return codes.filter(Boolean);
 };
 
 module.exports = {
