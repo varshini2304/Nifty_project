@@ -1,9 +1,9 @@
 ﻿// backend/src/server.js
 const { loadEnv } = require('./config/env');
 const { initMongo } = require('./config/db');
-const { app } = require('./app');
 
 const config = loadEnv();
+const { app } = require('./app');
 
 initMongo(config.MONGODB_URI);
 

@@ -1,4 +1,4 @@
-﻿// frontend/tailwind.config.js
+// frontend/tailwind.config.js
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {

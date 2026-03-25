@@ -20,7 +20,6 @@ const TradesListSchema = new mongoose.Schema(
   }
 );
 
-TradesListSchema.index({ tradeNo: 1 }, { unique: true });
 TradesListSchema.index({ code: 1, tradeDate: 1 });
 TradesListSchema.index({ isDeleted: 1 });
 

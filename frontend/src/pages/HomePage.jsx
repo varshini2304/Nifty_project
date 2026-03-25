@@ -70,7 +70,7 @@ const HomePage = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-brandBlue text-white shadow-card" bodyStyle={{ padding: 24 }}>
+      <Card className="bg-brandBlue text-white shadow-card" styles={{ body: { padding: 24 } }}>
         <div className="text-2xl font-semibold">Welcome, {username}</div>
         <div className="text-sm mt-1">{dayjs().format('DD/MM/YYYY')}</div>
         <div className="mt-4">

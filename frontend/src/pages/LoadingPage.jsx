@@ -31,21 +31,38 @@ const LoadingPage = () => {
 
   useEffect(() => {
     let isMounted = true;
-    const poller = setInterval(async () => {
+    let timerId = null;
+    let attempts = 0;
+
+    const checkHealth = async () => {
       try {
         const response = await axiosInstance.get('/health');
-        if (response.data?.data?.status === 'ok' && isMounted) {
+        const ok =
+          response?.status === 200 &&
+          (response.data?.data?.status === 'ok' ||
+            response.data?.status === 'ok' ||
+            response.data?.success === true);
+        if (ok && isMounted) {
           setIsReady(true);
-          clearInterval(poller);
+          return;
         }
       } catch (err) {
         // keep polling
       }
-    }, 500);
+
+      if (!isMounted) return;
+      attempts += 1;
+      const delay = Math.min(2000 + attempts * 500, 10000);
+      timerId = setTimeout(checkHealth, delay);
+    };
+
+    timerId = setTimeout(checkHealth, 300);
 
     return () => {
       isMounted = false;
-      clearInterval(poller);
+      if (timerId) {
+        clearTimeout(timerId);
+      }
     };
   }, []);
 

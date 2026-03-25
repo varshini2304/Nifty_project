@@ -47,7 +47,7 @@ const TradeDetailsModal = ({ open, onClose, stockCode, asOfDate }) => {
           <Button onClick={onClose}>Close</Button>
         </div>
       }
-      destroyOnClose
+      destroyOnHidden
       centered
     >
       {isFetching ? (
